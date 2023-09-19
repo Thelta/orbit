@@ -22,8 +22,6 @@ on:
       - 'cmake/**'
       - 'src/**'
       - 'third_party/**'
-  schedule:
-  - cron: '0 7 * * *'
 
 permissions: read-all
 
