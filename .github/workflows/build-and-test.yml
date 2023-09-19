@@ -119,6 +119,7 @@ jobs:
            libgtest-dev                                   \
            libgmock-dev                                   \
            git                                            \
+           ninja-build                                    \
            libprotobuf-dev
       - name: Install dependencies (Windows)
         if: startsWith(matrix.config.os, 'windows')
@@ -158,11 +159,12 @@ jobs:
            -DCMAKE_CXX_FLAGS="-march=sandybridge -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer" \
            -DCMAKE_C_COMPILER_LAUNCHER=ccache                                                          \
            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                                                        \
+           -GNinja                                                                                      \
            ${GITHUB_WORKSPACE}
       - name: CMake Build (Ubuntu)
         if: startsWith(matrix.config.os, 'ubuntu')
         working-directory: ./build
-        run: cmake --build .
+        run: cmake --build . --target=OrbitFakeClient
       - name: Run clang-tidy (Clang Debug)
         if: github.event_name == 'pull_request' && matrix.config.name == 'Clang Debug'
         run: |
