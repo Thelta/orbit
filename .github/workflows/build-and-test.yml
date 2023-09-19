@@ -39,32 +39,11 @@ jobs:
       matrix:
         config:
         - {
-            name: "GCC Release",
-            build_type: 'Release',
-            cc: "gcc",
-            cxx: "g++",
-            os: "ubuntu-22.04"
-        }
-        - {
-            name: "Clang Release",
-            build_type: 'Release',
-            cc: "clang",
-            cxx: "clang++",
-            os: "ubuntu-22.04"
-        }
-        - {
             name: "Clang Debug",
             build_type: 'Debug',
             cc: "clang",
             cxx: "clang++",
             os: "ubuntu-22.04"
-        }
-        - {
-            name: "MSVC Release",
-            build_type: 'Release',
-            cc: "msvc",
-            os: "windows-2019",
-            conan_profile: "msvc2019_release"
         }
     env:
       CCACHE_BASEDIR: "${GITHUB_WORKSPACE}"
@@ -155,6 +134,8 @@ jobs:
           CXX: ${{ matrix.config.cxx }}
           CC: ${{ matrix.config.cc }}
         run: |
+          dpkg -S /usr/lib/llvm-15/lib/libLLVM.so
+          nm -gC /usr/lib/llvm-15/lib/libLLVM.so | grep getRvaPtr
           cmake -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}                                     \
            -DCMAKE_CXX_FLAGS="-march=sandybridge -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer" \
            -DCMAKE_C_COMPILER_LAUNCHER=ccache                                                          \
