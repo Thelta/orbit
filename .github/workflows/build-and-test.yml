@@ -86,7 +86,7 @@ jobs:
            libssh2-1-dev                                  \
            vulkan-validationlayers-dev                    \
            libz-dev                                       \
-           llvm-dev                                       \
+           llvm-15-dev                                       \
            protobuf-compiler-grpc                         \
            pkg-config                                     \
            libvulkan-volk-dev                             \
@@ -99,6 +99,7 @@ jobs:
            libgmock-dev                                   \
            git                                            \
            ninja-build                                    \
+           debtree \
            libprotobuf-dev
       - name: Install dependencies (Windows)
         if: startsWith(matrix.config.os, 'windows')
@@ -135,7 +136,7 @@ jobs:
           CC: ${{ matrix.config.cc }}
         run: |
           dpkg -S /usr/lib/llvm-15/lib/libLLVM.so
-          nm -gC /usr/lib/llvm-15/lib/libLLVM.so | grep getRvaPtr
+          nm -DC /usr/lib/llvm-15/lib/libLLVM.so | grep getRvaPtr
           cmake -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}                                     \
            -DCMAKE_CXX_FLAGS="-march=sandybridge -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer" \
            -DCMAKE_C_COMPILER_LAUNCHER=ccache                                                          \
