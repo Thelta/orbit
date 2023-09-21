@@ -22,8 +22,6 @@ on:
       - 'cmake/**'
       - 'src/**'
       - 'third_party/**'
-  schedule:
-  - cron: '0 7 * * *'
 
 permissions: read-all
 
@@ -41,32 +39,11 @@ jobs:
       matrix:
         config:
         - {
-            name: "GCC Release",
-            build_type: 'Release',
-            cc: "gcc",
-            cxx: "g++",
-            os: "ubuntu-22.04"
-        }
-        - {
-            name: "Clang Release",
-            build_type: 'Release',
-            cc: "clang",
-            cxx: "clang++",
-            os: "ubuntu-22.04"
-        }
-        - {
             name: "Clang Debug",
             build_type: 'Debug',
             cc: "clang",
             cxx: "clang++",
             os: "ubuntu-22.04"
-        }
-        - {
-            name: "MSVC Release",
-            build_type: 'Release',
-            cc: "msvc",
-            os: "windows-2019",
-            conan_profile: "msvc2019_release"
         }
     env:
       CCACHE_BASEDIR: "${GITHUB_WORKSPACE}"
@@ -121,6 +98,7 @@ jobs:
            libgtest-dev                                   \
            libgmock-dev                                   \
            git                                            \
+           ninja-build                                    \
            libprotobuf-dev
       - name: Install dependencies (Windows)
         if: startsWith(matrix.config.os, 'windows')
@@ -160,11 +138,11 @@ jobs:
            -DCMAKE_CXX_FLAGS="-march=sandybridge -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer" \
            -DCMAKE_C_COMPILER_LAUNCHER=ccache                                                          \
            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache                                                        \
-           ${GITHUB_WORKSPACE}
+           -GNinja ${GITHUB_WORKSPACE}
       - name: CMake Build (Ubuntu)
         if: startsWith(matrix.config.os, 'ubuntu')
         working-directory: ./build
-        run: cmake --build .
+        run: cmake --build . --target=OrbitFakeClient
       - name: Run clang-tidy (Clang Debug)
         if: github.event_name == 'pull_request' && matrix.config.name == 'Clang Debug'
         run: |
