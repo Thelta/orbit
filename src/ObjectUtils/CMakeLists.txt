@@ -49,6 +49,8 @@ endif()
 
 target_include_directories(ObjectUtils PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 
+message(STATUS "here are ${LLVM_LIBS}")
+
 target_link_libraries(
   ObjectUtils
   PUBLIC GrpcProtos
