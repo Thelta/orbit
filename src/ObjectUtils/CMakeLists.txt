@@ -4,16 +4,13 @@
 
 cmake_minimum_required(VERSION 3.15)
 
-find_library(LLVM_LIBS LLVM NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH PATHS ${LLVM_LIBRARY_DIR})
+set(REQUIRED_LLVM_LIBS LLVMDebugInfoCodeView
+                        LLVMDebugInfoDWARF
+                        LLVMDebugInfoPDB
+                        LLVMObject
+                        LLVMSymbolize)
 
-if(NOT LLVM_LIBS)
-  set(LLVM_LIBS 
-  LLVMDebugInfoCodeView
-  LLVMDebugInfoDWARF
-  LLVMDebugInfoPDB
-  LLVMObject
-  LLVMSymbolize)
-endif()
+find_llvm_libs("${REQUIRED_LLVM_LIBS}")
 
 project(ObjectUtils)
 add_library(ObjectUtils STATIC)

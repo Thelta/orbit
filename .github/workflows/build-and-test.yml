@@ -142,7 +142,7 @@ jobs:
       - name: CMake Build (Ubuntu)
         if: startsWith(matrix.config.os, 'ubuntu')
         working-directory: ./build
-        run: cmake --build . --target=OrbitFakeClient
+        run: cmake --build .
       - name: Run clang-tidy (Clang Debug)
         if: github.event_name == 'pull_request' && matrix.config.name == 'Clang Debug'
         run: |
